@@ -35,16 +35,13 @@
     </v-toolbar>
     <l-map :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-      <l-marker :lat-lng="marker"></l-marker>
+      <l-marker v-for="(mark, index) in marker" :lat-lng="mark.test"></l-marker>
     </l-map>
   </v-container>
 </template>
 
 <script>
-import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 export default {
-  name: "Home",
-  components: { LMap, LTileLayer, LMarker },
   data() {
     return {
       zoom: 13,
@@ -52,10 +49,14 @@ export default {
       url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      marker:  L.latLng(51.482010960803116, 7.217245101928711),
+      marker: [
+        { test: L.latLng(51.482010960803116, 7.217245101928711) },
+        { test: L.latLng(47.41322, 2.219482) }
+      ]
     };
   }
 };
 </script>
 
-<style></style>
+<style scoped>
+</style>
