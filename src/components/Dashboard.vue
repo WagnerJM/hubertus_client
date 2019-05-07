@@ -1,8 +1,6 @@
 <template>
-  <v-container>
-    <h1>Kartenübersicht</h1>
-    <br>
-    <v-toolbar class="primary" dark>
+  <v-container fluid>
+    <v-toolbar class="toolbar" dense>
       <v-toolbar-title>Reviername</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -33,7 +31,7 @@
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <l-map :zoom="zoom" :center="center">
+    <l-map class="map" :zoom="zoom" :center="center">
       <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
       <l-marker v-for="(mark, index) in marker" :lat-lng="mark.test"></l-marker>
     </l-map>
@@ -59,4 +57,7 @@ export default {
 </script>
 
 <style scoped>
+.map {
+  height: 90%;
+}
 </style>

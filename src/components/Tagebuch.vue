@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container >
     <h1>Jagdtagebuch</h1>
   </v-container>
 </template>
