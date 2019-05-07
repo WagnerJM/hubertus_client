@@ -2,10 +2,10 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import Dashboard from "@/components/Dashboard";
-//import Login from "@/components/auth/Login";
-//import Register from "@/components/auth/Register";
+import Login from "@/components/auth/Login";
+import Register from "@/components/auth/Register";
 //import Profile from "@/components/Profile";
-//import Tagebuch from "@/components/Tagebuch";
+import Tagebuch from "@/components/Tagebuch";
 
 Vue.use(Router);
 
@@ -16,6 +16,21 @@ export default new Router({
       path: "/",
       name: "Dashboard",
       component: Dashboard
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: Register
+    },
+    {
+      path: "/tagebuch",
+      name: "Tagebuch",
+      component: Tagebuch
+    },
+    {
+      path: "/login",
+      name: "Login",
+      component: Login
     }
   ]
 });

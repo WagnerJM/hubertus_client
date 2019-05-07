@@ -9,6 +9,26 @@
         <v-btn flat to="/" v-if="loginState">Übersicht</v-btn>
         <v-btn flat to="/tagebuch" v-if="loginState">Tagebuch</v-btn>
         <v-btn flat to="/profile" v-if="loginState">Profile</v-btn>
+
+        <v-menu :nudge-width="100" offset-y v-if="loginState">
+          <template v-slot:activator="{ on }">
+            <v-btn flat v-on="on">
+              <v-icon dark>account_circle</v-icon>
+              <span>Account</span>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-tile
+              v-for="(item, index) in items"
+              :key="index"
+              @click
+              :to="{path: item.path  }"
+            >
+              <v-list-tile-title :to="item.path">{{item.title}}</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </v-toolbar-items>
     </v-toolbar>
 
@@ -22,8 +42,18 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-  name: "App"
+  computed: mapState({
+    loginState: state => state.isAuthenticated
+  }),
+  data: () => ({
+    items: [
+      { title: "Profil", path: "/profil" },
+      { title: "Logout", path: "/logout" }
+    ]
+  })
 };
 </script>
 
