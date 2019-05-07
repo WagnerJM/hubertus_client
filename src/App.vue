@@ -6,9 +6,8 @@
       <v-toolbar-items>
         <v-btn flat to="/register" v-if="!loginState">Register</v-btn>
         <v-btn flat to="/login" v-if="!loginState">Login</v-btn>
-        <v-btn flat to="/" v-if="loginState">Übersicht</v-btn>
+        <v-btn flat to="/dashboard" v-if="loginState">Übersicht</v-btn>
         <v-btn flat to="/tagebuch" v-if="loginState">Tagebuch</v-btn>
-        
 
         <v-menu :nudge-width="100" offset-y v-if="loginState">
           <template v-slot:activator="{ on }">
