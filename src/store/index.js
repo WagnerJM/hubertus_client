@@ -7,7 +7,16 @@ const store = new Vuex.Store({
   modules: {},
   state: {
     isAuthenticated: true,
-    reviere: []
+    reviere: [
+      {
+        reviername: "Kein Revier",
+        ort: ""
+      }
+    ],
+    user: {
+      token: "",
+      username: ""
+    }
   },
   mutations: {},
   actions: {},

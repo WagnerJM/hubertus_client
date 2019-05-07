@@ -1,55 +1,60 @@
 <template>
   <v-container>
     <h1>Kartenübersicht</h1>
-    <div>
-      <v-card>
-        <v-toolbar class="primary" dark>
-          <v-toolbar-title>Reviername</v-toolbar-title>
+    <br>
+    <v-toolbar class="primary" dark>
+      <v-toolbar-title>Reviername</v-toolbar-title>
 
-          <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn flat icon v-on="on">
-                  <v-icon>add</v-icon>
-                </v-btn>
-              </template>
-              <span>Neues Revier</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn flat icon v-on="on">
-                  <v-icon>skip_previous</v-icon>
-                </v-btn>
-              </template>
-              <span>Revier zurück</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn flat icon v-on="on">
-                  <v-icon>skip_next</v-icon>
-                </v-btn>
-              </template>
-              <span>Revier vor</span>
-            </v-tooltip>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-container>
-          <v-layout>
-            <v-flex xs10>PLACEHOLDER KARTE</v-flex>
-            <v-flex xs2>
-              <v-icon size="64">mdi-calendar-text</v-icon>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-    </div>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn flat icon v-on="on">
+              <v-icon>add</v-icon>
+            </v-btn>
+          </template>
+          <span>Neues Revier</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn flat icon v-on="on">
+              <v-icon>skip_previous</v-icon>
+            </v-btn>
+          </template>
+          <span>Revier zurück</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn flat icon v-on="on">
+              <v-icon>skip_next</v-icon>
+            </v-btn>
+          </template>
+          <span>Revier vor</span>
+        </v-tooltip>
+      </v-toolbar-items>
+    </v-toolbar>
+    <l-map :zoom="zoom" :center="center">
+      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+      <l-marker :lat-lng="marker"></l-marker>
+    </l-map>
   </v-container>
 </template>
 
 <script>
+import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 export default {
-  name: "Home"
+  name: "Home",
+  components: { LMap, LTileLayer, LMarker },
+  data() {
+    return {
+      zoom: 13,
+      center: L.latLng(51.482010960803116, 7.217245101928711),
+      url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      marker:  L.latLng(51.482010960803116, 7.217245101928711),
+    };
+  }
 };
 </script>
 
