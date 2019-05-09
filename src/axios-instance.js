@@ -1,7 +1,23 @@
-import axios from 'axios';
+import Axios from 'axios';
+import store from './store'
 
-const $axios = axios.create({
-    baseURL: "http://localhost:5001/api/v1"
+const http = Axios.create({
+    baseURL: "http://localhost:5001/api/v1",
+    timeout: 1000,
+    headers: {
+        'Content-Type': 'application/json'
+    },
 });
 
-export default $axios;
+http.interceptors.request.use(
+    function (config) {
+        const token = store.getters['token'];
+        if (token) config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    },
+    function (error) {
+        return Promise.reject(error);
+    }
+);
+
+export default http;

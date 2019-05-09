@@ -7,16 +7,16 @@
       <v-text-field v-model="username" :rules="nameRules" label="Username" required></v-text-field>
 
       <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
-      <v-text-field v-model="password" :rules="rules" :counter="8" label="Password" required></v-text-field>
+      <v-text-field v-model="password" :rules="pwRules" :counter="8" label="Password" required></v-text-field>
 
       <v-checkbox
-        v-model="checkbox"
-        :rules="[v => !!v || 'Bestätigen zum weiter machen.']"
+        v-model="datenschutz"
+        :rules="dsRules"
         label="DSGVO"
         required
       ></v-checkbox>
 
-      <v-btn :disabled="!valid" color="primary" @click="validate">Validate</v-btn>
+      <v-btn :disabled="!valid" color="primary" @click="register">Register</v-btn>
 
       <v-btn color="error" @click="reset">Reset Form</v-btn>
     </v-form>
@@ -35,11 +35,15 @@ export default {
       v => /.+@.+/.test(v) || "Sie müssen eine gültige E-Mail Adresse eingeben."
     ],
     select: null,
-    checkbox: false,
-    rules: {
-      required: value => !!value || "Required.",
-      min: v => v.length >= 8 || "Min 8 characters"
-    },
+    datenschutz: false,
+    pwRules: [
+      value => !!value || "Required.",
+      v => v.length >= 8 || "Min 8 characters"
+    ],
+    dsRules: [
+      v => !!v || 'Bestätigen zum weiter machen.'
+    ],
+    password: ""
     
   }),
 
@@ -51,7 +55,23 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+    },
+    register() {
+      const formData = {
+        username: this.username,
+        password: this.password,
+        email: this.email,
+        datenschutz: this.datenschutz
+
+      };
+      this.$store.dispatch("REGISTER", {
+        username: formData.username,
+        password: formData.password,
+        email: formData.email,
+        datenschutz: formData.datenschutz
+      });
     }
+  
   }
 };
 </script>

@@ -1,25 +1,25 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import Axios from "axios";
+import http from '../axios-instance';
 
 Vue.use(Vuex);
 
 const getDefaultUserState = () => {
   return {
     token: "",
-      username: "",
-      is_admin: false,
-      is_active: false,
-      free_user: false,
-      pro_user: false,
-      email: "",
-      vorname: "",
-      nachname: "",
-      adresse: {
-        straße: "",
-        hausnummer: "",
-        postleitzahl: ""
-      }
+    username: "",
+    is_admin: false,
+    is_active: false,
+    free_user: false,
+    pro_user: false,
+    email: "",
+    vorname: "",
+    nachname: "",
+    adresse: {
+      straße: "",
+      hausnummer: "",
+      postleitzahl: ""
+    }
   }
 }
 
@@ -61,7 +61,7 @@ const store = new Vuex.Store({
     logout: state => {
       state.isAuthenticated = false;
     },
-    setUserData: (state, playload) => {
+    setUserData: (state, payload) => {
       state.user.token = payload.token;
       state.user.username = payload.username;
       state.user.email = payload.email;
@@ -79,67 +79,88 @@ const store = new Vuex.Store({
       state.serverMesssage = payload.msg;
     },
     resetUserState: (state) => {
-      Object.assign(state.user, getDefaultUserState)
+      Object.assign(state.user, getDefaultUserState);
     }
     
   },
   actions: {
-    REGISTER({ commit }, authData) {
-      commit('loading');
-      Axios({
-        method: "post",
-        url: "/register",
-        data: {
-          username: authData.username,
-          password: authData.password,
-          email: authData.email,
-          datenschutz: authData.dattenschutz
-        }
-      })
-      .then ( res => {
+    REGISTER({
+        commit
+      }, authData) {
         commit('loading');
-        commit('setServerMessage');
-        this.$router.push("Login");
-      })
-      .catch( error => {
+        http({
+            method: "post",
+            url: "/register",
+            data: {
+              username: authData.username,
+              password: authData.password,
+              email: authData.email,
+              datenschutz: authData.dattenschutz
+            }
+          })
+          .then(res => {
+
+            commit('loading');
+            commit('setServerMessage', res.data);
+            this.$router.push("Login");
+          })
+          .catch(error => {
+            commit('loading');
+
+            commit('setServerMessage', error.data);
+            this.$router.push("Register");
+          })
+      },
+      LOGIN({
+        commit
+      }, authData) {
         commit('loading');
-        console.log(error);
-        commit('setServerMessage');
-        this.$router.push("Register");
-      })
-    },
-    LOGIN({ commit }, authData ) {
-      commit('loading');
-      Axios({
-        method: "post",
-        url: "/login",
-        data: {
-          username: authData.username,
-          password: authData.password
-        }
-      }).then (res => {
-        commit('setUserData', res.data);
-        commit('login_success');
-        this.$router.push("Dashboard")
-      }).catch( error => {
-        commit('setServerMessage');
+        http({
+          method: "post",
+          url: "/login",
+          data: {
+            username: authData.username,
+            password: authData.password
+          }
+        }).then(res => {
+          commit('setUserData', res.data);
+          commit('login_success');
+          this.$router.push("Dashboard")
+        }).catch(error => {
+
+          commit('setServerMessage', error.data);
+          commit('loading');
+          this.$router.push("Login")
+
+        })
+      },
+      LOGOUT({
+        commit
+      }) {
         commit('loading');
-        this.$router.push("Login")
+        http({
+          method: "post",
+          url: "/logout"
+        }).then(() => {
 
-      })
-    },
-    LOGOUT({ commit }) {
-      commit('loading');
-      Axios({
-        method: "post",
-        url: "/logout"
-      }).then( resp =>{
+          commit('resetUserState');
+          commit('loading');
+          this.$router.push('Login')
+        }).catch(error => {
 
-      }).catch(error => {
 
-      })
-    } 
+          commit('setServerMessage', error.data);
+          commit('loading');
+          this.$router.push("Login")
+        })
+      }
   },
-  getters: {}
+  getters: {
+    token({
+      token
+    }) {
+      return token;
+    },
+  }
 });
 export default store;
