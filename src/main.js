@@ -7,6 +7,16 @@ import store from "./store";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 //import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import $axios from './axios-instance.js'
+
+$axios.interceptors.request.user((config) => {
+  const token = store.getters['auth/token'];
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config;
+});
 
 Vue.config.productionTip = false;
 

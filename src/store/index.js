@@ -1,12 +1,32 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import Axios from "axios";
 
 Vue.use(Vuex);
+
+const getDefaultUserState = () => {
+  return {
+    token: "",
+      username: "",
+      is_admin: false,
+      is_active: false,
+      free_user: false,
+      pro_user: false,
+      email: "",
+      vorname: "",
+      nachname: "",
+      adresse: {
+        straße: "",
+        hausnummer: "",
+        postleitzahl: ""
+      }
+  }
+}
 
 const store = new Vuex.Store({
   modules: {},
   state: {
-    isAuthenticated: true,
+    isAuthenticated: false,
     reviere: [
       {
         reviername: "Kein Revier",
@@ -15,11 +35,111 @@ const store = new Vuex.Store({
     ],
     user: {
       token: "",
-      username: ""
+      username: "",
+      is_admin: false,
+      is_active: false,
+      free_user: false,
+      pro_user: false,
+      email: "",
+      vorname: "",
+      nachname: "",
+      adresse: {
+        straße: "",
+        hausnummer: "",
+        postleitzahl: ""
+      }
     }
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    loading: state => {
+      state.loading = !state.loading;
+    },
+    login_success: state => {
+      state.isAuthenticated = true;
+      state.loading = false;
+    },
+    logout: state => {
+      state.isAuthenticated = false;
+    },
+    setUserData: (state, playload) => {
+      state.user.token = payload.token;
+      state.user.username = payload.username;
+      state.user.email = payload.email;
+      state.user.adresse.straße = payload.adresse.straße;
+      state.user.adresse.hausnummer = payload.adresse.hausnummer;
+      state.user.adresse.postleitzahl = payload.adresse.postleitzahl;
+      state.user.free_user = payload.free_user;
+      state.user.pro_user = payload.pro_user;
+      state.user.is_active = payload.is_active;
+      state.user.is_admin = payload.is_admin;
+      state.user.vorname = payload.vorname;
+      state.user.nachname = payload.nachname;
+    },
+    setServerMessage: (state, payload) => {
+      state.serverMesssage = payload.msg;
+    },
+    resetUserState: (state) => {
+      Object.assign(state.user, getDefaultUserState)
+    }
+    
+  },
+  actions: {
+    REGISTER({ commit }, authData) {
+      commit('loading');
+      Axios({
+        method: "post",
+        url: "/register",
+        data: {
+          username: authData.username,
+          password: authData.password,
+          email: authData.email,
+          datenschutz: authData.dattenschutz
+        }
+      })
+      .then ( res => {
+        commit('loading');
+        commit('setServerMessage');
+        this.$router.push("Login");
+      })
+      .catch( error => {
+        commit('loading');
+        console.log(error);
+        commit('setServerMessage');
+        this.$router.push("Register");
+      })
+    },
+    LOGIN({ commit }, authData ) {
+      commit('loading');
+      Axios({
+        method: "post",
+        url: "/login",
+        data: {
+          username: authData.username,
+          password: authData.password
+        }
+      }).then (res => {
+        commit('setUserData', res.data);
+        commit('login_success');
+        this.$router.push("Dashboard")
+      }).catch( error => {
+        commit('setServerMessage');
+        commit('loading');
+        this.$router.push("Login")
+
+      })
+    },
+    LOGOUT({ commit }) {
+      commit('loading');
+      Axios({
+        method: "post",
+        url: "/logout"
+      }).then( resp =>{
+
+      }).catch(error => {
+
+      })
+    } 
+  },
   getters: {}
 });
 export default store;
