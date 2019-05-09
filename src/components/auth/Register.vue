@@ -1,5 +1,8 @@
 <template>
-  <v-container>
+  <v-container v-if="this.$store.state.loading">
+    <v-progress-circular id="loading" color="primary" indeterminate :size="70" :width="7" ></v-progress-circular>
+  </v-container>
+  <v-container v-else>
     <h1>Registrieren</h1>
 
     <br>
@@ -60,15 +63,13 @@ export default {
       const formData = {
         username: this.username,
         password: this.password,
-        email: this.email,
-        datenschutz: this.datenschutz
+        email: this.email
 
       };
       this.$store.dispatch("REGISTER", {
         username: formData.username,
         password: formData.password,
-        email: formData.email,
-        datenschutz: formData.datenschutz
+        email: formData.email
       });
     }
   

@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import http from '../axios-instance';
 
+import router from '../router'
+
 Vue.use(Vuex);
 
 const getDefaultUserState = () => {
@@ -27,6 +29,7 @@ const store = new Vuex.Store({
   modules: {},
   state: {
     isAuthenticated: false,
+    loading: false,
     reviere: [
       {
         reviername: "Kein Revier",
@@ -101,14 +104,17 @@ const store = new Vuex.Store({
           .then(res => {
 
             commit('loading');
+            console.log(res.method)
+            console.log("response")
             commit('setServerMessage', res.data);
-            this.$router.push("Login");
+            router.push({path: "/login"})
           })
           .catch(error => {
             commit('loading');
-
-            commit('setServerMessage', error.data);
-            this.$router.push("Register");
+            console.log(error)
+            console.log("error")
+            commit('setServerMessage', error);
+           router.push("/register");
           })
       },
       LOGIN({
@@ -125,12 +131,12 @@ const store = new Vuex.Store({
         }).then(res => {
           commit('setUserData', res.data);
           commit('login_success');
-          this.$router.push("Dashboard")
+         router.push("Dashboard")
         }).catch(error => {
 
           commit('setServerMessage', error.data);
           commit('loading');
-          this.$router.push("Login")
+         router.push("Login")
 
         })
       },
@@ -145,13 +151,13 @@ const store = new Vuex.Store({
 
           commit('resetUserState');
           commit('loading');
-          this.$router.push('Login')
+         router.push('Login')
         }).catch(error => {
 
 
           commit('setServerMessage', error.data);
           commit('loading');
-          this.$router.push("Login")
+         router.push("Login")
         })
       }
   },

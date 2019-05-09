@@ -3,7 +3,7 @@ import store from './store'
 
 const http = Axios.create({
     baseURL: "http://localhost:5001/api/v1",
-    timeout: 1000,
+    timeout: 10000,
     headers: {
         'Content-Type': 'application/json'
     },
