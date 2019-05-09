@@ -11,7 +11,7 @@ const http = Axios.create({
 
 http.interceptors.request.use(
     function (config) {
-        const token = store.user.token;
+        const token = store.getters['token'];
         if (token) config.headers.Authorization = `Bearer ${token}`;
         return config;
     },

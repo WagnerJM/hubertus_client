@@ -36,8 +36,8 @@ const store = new Vuex.Store({
         ort: ""
       }
     ],
+    token: "",
     user: {
-      token: "",
       username: "",
       is_admin: false,
       is_active: false,
@@ -65,7 +65,7 @@ const store = new Vuex.Store({
       state.isAuthenticated = false;
     },
     setUserData: (state, payload) => {
-      state.user.token = payload.token;
+      state.token = payload.token;
       state.user.username = payload.username;
       state.user.email = payload.email;
       if (payload.adresse == null) {
@@ -150,9 +150,6 @@ const store = new Vuex.Store({
         http({
           method: "post",
           url: "/logout",
-          headers: {
-            'Authorization ' + state.user.token
-          }
         }).then(() => {
 
           commit('resetUserState');
