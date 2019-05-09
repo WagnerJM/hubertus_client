@@ -21,7 +21,7 @@
 
       <v-btn :disabled="!valid" color="primary" @click="register">Register</v-btn>
 
-      <v-btn color="error" @click="reset">Reset Form</v-btn>
+      <v-btn color="error" @click="reset">Reset</v-btn>
     </v-form>
   </v-container>
 </template>

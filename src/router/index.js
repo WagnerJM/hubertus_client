@@ -4,6 +4,8 @@ import store from "../store";
 
 import Login from "@/components/auth/Login";
 import Register from "@/components/auth/Register";
+import Logout from "@/components/auth/Logout";
+
 
 import Tagebuch from "@/components/Tagebuch";
 import Dashboard from "@/components/Dashboard";
@@ -53,6 +55,11 @@ export default new Router({
       path: "/login",
       name: "Login",
       component: Login
+    },
+    {
+      path: "/logout",
+      name: "Logout",
+      component: Logout
     },
     {
       path: "/dashboard",

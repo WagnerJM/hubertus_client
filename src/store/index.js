@@ -68,9 +68,13 @@ const store = new Vuex.Store({
       state.user.token = payload.token;
       state.user.username = payload.username;
       state.user.email = payload.email;
-      state.user.adresse.straße = payload.adresse.straße;
-      state.user.adresse.hausnummer = payload.adresse.hausnummer;
-      state.user.adresse.postleitzahl = payload.adresse.postleitzahl;
+      if (payload.adresse == null) {
+        state.user.adresse = {}
+      } else {
+        state.user.adresse.straße = payload.adresse.straße;
+        state.user.adresse.postleitzahl = payload.adresse.postleitzahl;
+        state.user.adresse.hausnummer = payload.adresse.hausnummer;
+      }
       state.user.free_user = payload.free_user;
       state.user.pro_user = payload.pro_user;
       state.user.is_active = payload.is_active;
@@ -117,7 +121,7 @@ const store = new Vuex.Store({
            router.push("/register");
           })
       },
-      LOGIN({
+    LOGIN({
         commit
       }, authData) {
         commit('loading');
@@ -129,37 +133,35 @@ const store = new Vuex.Store({
             password: authData.password
           }
         }).then(res => {
-          commit('setUserData', res.data);
+          console.log("response")
           commit('login_success');
-         router.push("Dashboard")
+          router.push("/dashboard")
+          commit('setUserData', res.data);
         }).catch(error => {
+          console.log(error)
 
-          commit('setServerMessage', error.data);
-          commit('loading');
-         router.push("Login")
 
         })
       },
       LOGOUT({
-        commit
+        commit, state
       }) {
         commit('loading');
         http({
           method: "post",
-          url: "/logout"
+          url: "/logout",
+          headers: {
+            'Authorization ' + state.user.token
+          }
         }).then(() => {
 
           commit('resetUserState');
           commit('loading');
-         router.push('Login')
+         router.push('/login')
         }).catch(error => {
-
-
-          commit('setServerMessage', error.data);
-          commit('loading');
-         router.push("Login")
+          console.log(error)
         })
-      }
+      },
   },
   getters: {
     token({
