@@ -32,8 +32,65 @@ const store = new Vuex.Store({
     loading: false,
     reviere: [
       {
-        reviername: "Kein Revier",
-        ort: ""
+        reviername: "Test Revier",
+        positionen: [
+          {
+            lat: "",
+            log: ""
+          }
+        ],
+        ort: "Bochum",
+        marker: []
+      }
+    ],
+    tagebuch: [
+      {
+        eintagsart: "Ansprache",
+        beschreibung: "",
+        tier: {
+          wildArt: "Rehwild",
+          unterArt: "Böcke",
+          anzahl: 1
+        },
+        revier: "",
+        position: {
+          lat: "",
+          log: ""
+        },
+        datum: "10.05.19",
+        uhrzeit: "08:00"
+      },
+      {
+        eintagsart: "Abschuss",
+        beschreibung: "",
+        tier: {
+          wildArt: "Rehwild",
+          unterArt: "Ricke",
+          anzahl: 1
+        },
+        revier: "",
+        position: {
+          lat: "",
+          log: ""
+        },
+        datum: "10.05.19",
+        uhrzeit: "08:00"
+      },
+      {
+        eintagsart: "Sonstiges",
+        beschreibung: "",
+        tier: {
+          wildArt: "Rehwild",
+          unterArt: "Ricke",
+          anzahl: 1
+        },
+        revier: "",
+        position: {
+          lat: "",
+          log: ""
+        },
+        datum: "10.05.19",
+        uhrzeit: "08:00"
       }
     ],
     token: "",
@@ -65,8 +122,6 @@ const store = new Vuex.Store({
       state.isAuthenticated = false;
     },
     setUserData: (state, payload) => {
-      state.token = payload.token;
-      state.user.username = payload.username;
       state.user.email = payload.email;
       if (payload.adresse == null) {
         state.user.adresse = {};
@@ -82,11 +137,21 @@ const store = new Vuex.Store({
       state.user.vorname = payload.vorname;
       state.user.nachname = payload.nachname;
     },
+    setUserToken: (state, payload) => {
+      state.token = payload.token;
+      state.user.username = payload.username;
+    },
     setServerMessage: (state, payload) => {
       state.serverMesssage = payload.msg;
     },
     resetUserState: state => {
       Object.assign(state.user, getDefaultUserState);
+    },
+    setUserReveire: (state, payload) => {
+      state.reviere = payload.reviere;
+    },
+    setUserTagebuch: (state, payload) => {
+      state.tagebuch = payload.tagebuch;
     }
   },
   actions: {
@@ -117,7 +182,7 @@ const store = new Vuex.Store({
           router.push("/register");
         });
     },
-    LOGIN({ commit }, authData) {
+    LOGIN({ commit, dispatch }, authData) {
       commit("loading");
       http({
         method: "post",
@@ -131,7 +196,7 @@ const store = new Vuex.Store({
           console.log("response");
           commit("login_success");
           router.push("/dashboard");
-          commit("setUserData", res.data);
+          commit("setUserToken", res.data);
         })
         .catch(error => {
           console.log(error);
@@ -145,8 +210,49 @@ const store = new Vuex.Store({
       })
         .then(() => {
           commit("resetUserState");
+          console.log(state.user);
+          console.log(state.token);
           commit("loading");
           router.push("/login");
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    GET_USER_DATA({ commit }) {
+      commit("loading");
+      http({
+        method: "get",
+        url: "/user"
+      })
+        .then(res => {
+          commit("setUserData", res.data);
+          //dispatch("GET_USER_REVIERE");
+          //dispatch("GET_USER_TAGEBUCH");
+          console.log(res.data);
+          commit("loading");
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    GET_USER_REVIERE({ commit }) {
+      http
+        .get("/revier")
+        .then(res => {
+          console.log(res.data);
+          commit("setUserReviere", res.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    GET_USER_TAGEBUCH({ commit }) {
+      http
+        .get("/tagebuch")
+        .then(res => {
+          console.log(res.data);
+          commit("setUserTagebuch", res.data);
         })
         .catch(error => {
           console.log(error);

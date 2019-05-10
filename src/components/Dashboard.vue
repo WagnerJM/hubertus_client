@@ -11,7 +11,7 @@
       <v-toolbar-items>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn flat icon v-on="on">
+            <v-btn class="primary" flat icon v-on="on">
               <v-icon>add</v-icon>
             </v-btn>
           </template>
@@ -19,7 +19,7 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn flat icon v-on="on">
+            <v-btn class="primary" flat icon v-on="on">
               <v-icon>skip_previous</v-icon>
             </v-btn>
           </template>
@@ -27,7 +27,7 @@
         </v-tooltip>
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn flat icon v-on="on">
+            <v-btn class="primary" flat icon v-on="on">
               <v-icon>skip_next</v-icon>
             </v-btn>
           </template>
