@@ -6,7 +6,8 @@
       <v-toolbar-items>
         <v-btn flat to="/register" v-if="!loginState">Register</v-btn>
         <v-btn flat to="/login" v-if="!loginState">Login</v-btn>
-        <v-btn flat to="/dashboard" v-if="loginState">Übersicht</v-btn>
+        <v-btn  flat to="/dashboard" v-if="loginState">Reviere
+        </v-btn>
         <v-btn flat to="/tagebuch" v-if="loginState">Tagebuch</v-btn>
 
         <v-menu :nudge-width="100" offset-y v-if="loginState">

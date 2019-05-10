@@ -46,13 +46,13 @@ const store = new Vuex.Store({
     tagebuch: [
       {
         eintagsart: "Ansprache",
-        beschreibung: "",
+        beschreibung: "Test Beschreibung, wie auch immer das so funktioniert.",
         tier: {
           wildArt: "Rehwild",
           unterArt: "Böcke",
           anzahl: 1
         },
-        revier: "",
+        revier: "Test Revier",
         position: {
           lat: "",
           log: ""
