@@ -1,5 +1,9 @@
 <template>
   <v-container fluid>
+    <l-map class="map" :zoom="zoom" :center="center">
+      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+      <l-marker v-for="(mark, index) in marker" :lat-lng="mark.test"></l-marker>
+    </l-map>
     <v-toolbar class="toolbar" dense>
       <v-toolbar-title>Reviername</v-toolbar-title>
 
@@ -31,10 +35,6 @@
         </v-tooltip>
       </v-toolbar-items>
     </v-toolbar>
-    <l-map class="map" :zoom="zoom" :center="center">
-      <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-      <l-marker v-for="(mark, index) in marker" :lat-lng="mark.test"></l-marker>
-    </l-map>
   </v-container>
 </template>
 
@@ -59,5 +59,9 @@ export default {
 <style scoped>
 .map {
   height: 90%;
+  z-index: 1;
+}
+.toolbar {
+  position: relative;
 }
 </style>

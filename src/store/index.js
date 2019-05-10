@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import http from '../axios-instance';
+import http from "../axios-instance";
 
-import router from '../router'
+import router from "../router";
 
 Vue.use(Vuex);
 
@@ -22,13 +22,13 @@ const getDefaultUserState = () => {
       hausnummer: "",
       postleitzahl: ""
     }
-  }
-}
+  };
+};
 
 const store = new Vuex.Store({
   modules: {},
   state: {
-    isAuthenticated: false,
+    isAuthenticated: true,
     loading: false,
     reviere: [
       {
@@ -69,7 +69,7 @@ const store = new Vuex.Store({
       state.user.username = payload.username;
       state.user.email = payload.email;
       if (payload.adresse == null) {
-        state.user.adresse = {}
+        state.user.adresse = {};
       } else {
         state.user.adresse.straße = payload.adresse.straße;
         state.user.adresse.postleitzahl = payload.adresse.postleitzahl;
@@ -85,87 +85,78 @@ const store = new Vuex.Store({
     setServerMessage: (state, payload) => {
       state.serverMesssage = payload.msg;
     },
-    resetUserState: (state) => {
+    resetUserState: state => {
       Object.assign(state.user, getDefaultUserState);
     }
-    
   },
   actions: {
-    REGISTER({
-        commit
-      }, authData) {
-        commit('loading');
-        http({
-            method: "post",
-            url: "/register",
-            data: {
-              username: authData.username,
-              password: authData.password,
-              email: authData.email,
-              datenschutz: authData.dattenschutz
-            }
-          })
-          .then(res => {
-
-            commit('loading');
-            console.log(res.method)
-            console.log("response")
-            commit('setServerMessage', res.data);
-            router.push({path: "/login"})
-          })
-          .catch(error => {
-            commit('loading');
-            console.log(error)
-            console.log("error")
-            commit('setServerMessage', error);
-           router.push("/register");
-          })
-      },
-    LOGIN({
-        commit
-      }, authData) {
-        commit('loading');
-        http({
-          method: "post",
-          url: "/login",
-          data: {
-            username: authData.username,
-            password: authData.password
-          }
-        }).then(res => {
-          console.log("response")
-          commit('login_success');
-          router.push("/dashboard")
-          commit('setUserData', res.data);
-        }).catch(error => {
-          console.log(error)
-
-
+    REGISTER({ commit }, authData) {
+      commit("loading");
+      http({
+        method: "post",
+        url: "/register",
+        data: {
+          username: authData.username,
+          password: authData.password,
+          email: authData.email,
+          datenschutz: authData.dattenschutz
+        }
+      })
+        .then(res => {
+          commit("loading");
+          console.log(res.method);
+          console.log("response");
+          commit("setServerMessage", res.data);
+          router.push({ path: "/login" });
         })
-      },
-      LOGOUT({
-        commit, state
-      }) {
-        commit('loading');
-        http({
-          method: "post",
-          url: "/logout",
-        }).then(() => {
-
-          commit('resetUserState');
-          commit('loading');
-         router.push('/login')
-        }).catch(error => {
-          console.log(error)
+        .catch(error => {
+          commit("loading");
+          console.log(error);
+          console.log("error");
+          commit("setServerMessage", error);
+          router.push("/register");
+        });
+    },
+    LOGIN({ commit }, authData) {
+      commit("loading");
+      http({
+        method: "post",
+        url: "/login",
+        data: {
+          username: authData.username,
+          password: authData.password
+        }
+      })
+        .then(res => {
+          console.log("response");
+          commit("login_success");
+          router.push("/dashboard");
+          commit("setUserData", res.data);
         })
-      },
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    LOGOUT({ commit, state }) {
+      commit("loading");
+      http({
+        method: "post",
+        url: "/logout"
+      })
+        .then(() => {
+          commit("resetUserState");
+          commit("loading");
+          router.push("/login");
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   },
   getters: {
-    token({
-      token
-    }) {
+    token({ token }) {
       return token;
-    },
+    }
   }
 });
 export default store;
