@@ -45,8 +45,9 @@ const store = new Vuex.Store({
     ],
     tagebuch: [
       {
-        eintagsart: "Ansprache",
-        beschreibung: "Test Beschreibung, wie auch immer das so funktioniert.",
+        eintragsart: "Ansprache",
+        beschreibung:
+          "Test Beschreibung, wie auch immer das so funktioniert. Ich weiss ja nicht wie der Zeilenumbruch ist.",
         tier: {
           wildArt: "Rehwild",
           unterArt: "Böcke",
@@ -58,10 +59,12 @@ const store = new Vuex.Store({
           log: ""
         },
         datum: "10.05.19",
-        uhrzeit: "08:00"
+        uhrzeit: "08:00",
+        foto: false,
+        foto_path: ""
       },
       {
-        eintagsart: "Abschuss",
+        eintragsart: "Abschuss",
         beschreibung: "",
         tier: {
           wildArt: "Rehwild",
@@ -74,10 +77,12 @@ const store = new Vuex.Store({
           log: ""
         },
         datum: "10.05.19",
-        uhrzeit: "08:00"
+        uhrzeit: "08:00",
+        foto: true,
+        foto_path: ""
       },
       {
-        eintagsart: "Sonstiges",
+        eintragsart: "Sonstiges",
         beschreibung: "",
         tier: {
           wildArt: "Rehwild",
@@ -90,7 +95,9 @@ const store = new Vuex.Store({
           log: ""
         },
         datum: "10.05.19",
-        uhrzeit: "08:00"
+        uhrzeit: "08:00",
+        foto: true,
+        foto_path: ""
       }
     ],
     token: "",
