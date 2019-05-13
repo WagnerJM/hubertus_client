@@ -3,7 +3,7 @@
     <v-progress-circular id="loading" color="primary" indeterminate :size="70" :width="7"></v-progress-circular>
   </v-container>
   <v-container v-else>
-    <v-layout column>
+    <v-layout align-center justify-center column>
       <v-flex xs12 lg9>
         <h1>Jagdtagebuch</h1>
         <v-dialog v-model="dialog" max-width="600px">
@@ -14,52 +14,51 @@
           </template>
           <v-card>
             <v-card-title class="primary">
-              <span dark class="headline">Jagdtagebuch Eintrag</span>
+              <span class="headline white--text">Jagdtagebuch Eintrag</span>
             </v-card-title>
             <v-card-text>
               <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field label="Legal first name*" required></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field
-                      label="Legal middle name"
-                      hint="example of helper text only on focus"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 md4>
-                    <v-text-field
-                      label="Legal last name*"
-                      hint="example of persistent helper text"
-                      persistent-hint
-                      required
-                    ></v-text-field>
-                  </v-flex>
+                <v-layout column >
                   <v-flex xs12>
-                    <v-text-field label="Email*" required></v-text-field>
+                    <v-textarea
+                      name="input-7-1"
+                      box
+                      label="Beschreibung"
+                      auto-grow
+                      value=""
+                      ></v-textarea>
                   </v-flex>
+                  
                   <v-flex xs12>
-                    <v-text-field label="Password*" type="password" required></v-text-field>
+                    <v-btn @click="addEintragsart($event,'Abschuss')" flat>Abschuss</v-btn>
+                    <v-btn @click="addEintragsart($event,'Ansprach')" flat>Ansprache</v-btn>
+                    <v-btn @click="addEintragsart($event,'sonstiges')" flat>Sonstiges</v-btn>
                   </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-select :items="['0-17', '18-29', '30-54', '54+']" label="Age*" required></v-select>
+                  <v-flex>
+                    <v-btn flat >Rehwild</v-btn>
+                    <v-btn flat @click="addWildart($event, 'Rotwild')" >Rotwild</v-btn>
                   </v-flex>
-                  <v-flex xs12 sm6>
-                    <v-autocomplete
-                      :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                      label="Interests"
-                      multiple
-                    ></v-autocomplete>
-                  </v-flex>
+                  
+                  
+                  
+                    
+                  <v-flex xs12 >
+                    <v-btn icon color="primary" @click="decrement()"><v-icon>add</v-icon></v-btn>
+                    <span>
+                      {{this.tagebuch.tier.anzahl}}
+                    </span>
+                  <v-btn icon color="primary" @click="increment()"><v-icon>add</v-icon></v-btn>
+                        
+                   </v-flex>
                 </v-layout>
+
+                
               </v-container>
-              <small>*indicates required field</small>
-            </v-card-text>
+              </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-              <v-btn color="blue darken-1" flat @click="dialog = false">Save</v-btn>
+              <v-btn @click="cancel()"  >Cancel</v-btn>
+              
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -131,15 +130,24 @@ export default {
   computed: mapState({
     tagebuchState: state => state.tagebuch
   }),
-  data: () => ({
-    dialog: false,
-    tagebuch: {
+  methods: {
+    addEintragsart: function(event, value) {
+      this.tagebuch.eintragsart = value;
+    },
+    increment: function(event) {
+      this.tagebuch.tier.anzahl++;
+    },
+    decrement: function(event) {
+      this.tagebuch.tier.anzahl--;
+    },
+    resetForm: function(event) {
+      this.tagebuch = {
       eintragsart: "",
       beschreibung: "",
       tier: {
         wildArt: "",
         unterArt: "",
-        anzahl: null
+        anzahl: 1
       },
       revier: "",
       position: {
@@ -150,7 +158,46 @@ export default {
       uhrzeit: "",
       foto: true,
       foto_path: ""
+      }
+    },
+    cancel: function(event) {
+      this.dialog = false;
+      this.resetForm();
+    },
+    addWildart: function(event, Wildart) {
+      console.log(Wildart);
+      this.tier.wildArt = Wildart;
+    },
+    addUnterart: function(event, Unterart) {
+      this.thier.unterArt = Unterart;
     }
+  },
+  data: () => ({
+    dialog: false,
+    tagebuch: {
+      eintragsart: "",
+      beschreibung: "",
+      tier: {
+        wildArt: "",
+        unterArt: "",
+        anzahl: 1
+      },
+      revier: "",
+      position: {
+        lat: "",
+        log: ""
+      },
+      datum: "",
+      uhrzeit: "",
+      foto: true,
+      foto_path: ""
+    },
+    Wildart: [
+      { Wildart: "Rehwild", Rehwild: [ { name: "Bock" }, { name: "Ricke" } ] },
+      { Wildart: "Rotwild", Rotwild: [ { name: "Hirschbulle" }, { name: "Hirschkuh" } ] },
+    ]
+
+    
   })
 };
 </script>
